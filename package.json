@@ -1,0 +1,23 @@
+{
+  "name": "final-project-jj-backend",
+  "version": "0.1.0",
+  "description": "",
+  "main": "./src/app.js",
+  "scripts": {
+    "start": "node ./src/app.js",
+    "start:dev": "nodemon ./src/app.js",
+    "web": "node --optimize_for_size --max_old_space_size=448 --gc_interval=100 ./src/app.js",
+    "lint": "eslint ./"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
