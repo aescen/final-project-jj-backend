@@ -21,6 +21,15 @@ module.exports = {
       include: { all: true, nested: true },
     });
 
+    if (userFound === null) {
+      res.status(400);
+      res.json({
+        status: 'error',
+        message: 'Gagal login, user tidak ditemukan.',
+      });
+      return;
+    }
+
     const idVendor = userFound.vendor !== null ? userFound.vendor.vendor : undefined;
 
     console.log(await BCryptPassword.hash(password));
@@ -51,6 +60,7 @@ module.exports = {
         accessToken,
         user: {
           id: userFound.id,
+          idVendor,
           firstName: userFound.firstName,
           lastName: userFound.lastName || '',
           email: userFound.email,
