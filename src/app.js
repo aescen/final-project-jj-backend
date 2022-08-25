@@ -32,9 +32,22 @@ const errorHandler = (err, req, res, next) => {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
 
-    await Models.RolesModel.sync({ alter: true });
+    /* await Models.RolesModel.sync({ alter: true });
     await Models.UsersModel.sync({ alter: true });
     await Models.VendorsModel.sync({ alter: true });
+    await Models.ProductsModel.sync({ alter: true });
+    await Models.UploadsModel.sync({ alter: true });
+    await Models.ProductFilesModel.sync({ alter: true });
+    await Models.CollectionsModel.sync({ alter: true }); */
+
+    await Models.RolesModel.sync();
+    await Models.UsersModel.sync();
+    await Models.VendorsModel.sync();
+    await Models.ProductsModel.sync();
+    await Models.UploadsModel.sync();
+    await Models.ProductFilesModel.sync();
+    await Models.CollectionsModel.sync();
+
     console.log('DB setup done.');
   } catch (error) {
     console.error(error);

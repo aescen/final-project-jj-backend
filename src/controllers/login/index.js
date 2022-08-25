@@ -1,4 +1,4 @@
-const { UsersModel } = require('../../models');
+const { RolesModel, UsersModel, VendorsModel } = require('../../models');
 const { TokenManager, BCryptPassword } = require('../../utils');
 
 module.exports = {
@@ -18,7 +18,16 @@ module.exports = {
       where: {
         email,
       },
-      include: { all: true, nested: true },
+      include: [
+        {
+          model: VendorsModel,
+          required: true,
+        },
+        {
+          model: RolesModel,
+          required: true,
+        },
+      ],
     });
 
     if (userFound === null) {
