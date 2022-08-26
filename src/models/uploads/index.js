@@ -9,7 +9,7 @@ const UploadsModel = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    uid: {
+    originalName: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
@@ -23,6 +23,10 @@ const UploadsModel = sequelize.define(
     },
     fileUrl: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    uploadType: {
+      type: DataTypes.ENUM('photos', 'design'),
       allowNull: false,
     },
   },

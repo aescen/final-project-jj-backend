@@ -6,11 +6,6 @@ const ProductsModel = require('../products');
 const CollectionsModel = sequelize.define(
   'collections',
   {
-    id: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      autoIncrement: true,
-      primaryKey: true,
-    },
     idProduct: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
@@ -42,6 +37,8 @@ const CollectionsModel = sequelize.define(
     underscored: true,
   },
 );
+
+CollectionsModel.removeAttribute('id');
 
 VendorsModel.hasMany(CollectionsModel, { foreignKey: 'id' });
 CollectionsModel.belongsTo(VendorsModel, { foreignKey: 'idVendor' });

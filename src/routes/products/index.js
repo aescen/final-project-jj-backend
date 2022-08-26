@@ -1,9 +1,11 @@
 const express = require('express');
 const { products } = require('../../controllers');
-const { verifyJWT } = require('../common');
+const { verifyJWT, verifyAsVendor, parseFormData } = require('../common');
+
+const postProductMiddlewares = [verifyJWT, verifyAsVendor, parseFormData];
 
 const productsRoutes = express.Router();
 
-productsRoutes.post('/', verifyJWT, products.addProduct);
+productsRoutes.post('/', postProductMiddlewares, products.addProduct);
 
 module.exports = productsRoutes;

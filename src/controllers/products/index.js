@@ -1,34 +1,93 @@
-const busboy = require('busboy');
-// const { customAlphabet, urlAlphabet } = require('nanoid/non-secure');
-
-// const nanoid = customAlphabet(urlAlphabet, 16);
+const Models = require('../../models');
 
 module.exports = {
   addProduct: async (req, res) => {
-    const bb = busboy({ headers: req.headers });
-    bb.on('file', (name, file, info) => {
-      const { filename, encoding, mimeType } = info;
-      console.log(
-        `File [${name}]: filename: %j, encoding: %j, mimeType: %j`,
-        filename,
-        encoding,
-        mimeType,
-      );
-      file
-        .on('data', (data) => {
-          console.log(`File [${name}] got ${data.length} bytes`);
-        })
-        .on('close', () => {
-          console.log(`File [${name}] done`);
-        });
+    // set uploads
+
+    const { designPhotos, designFiles } = req.formData;
+
+    const photos = designPhotos.map((item) => ({
+      originalName: item.originalName,
+      fileName: item.name,
+      fileType: item.type,
+      fileUrl: item.url,
+      uploadType: 'photos',
+    }));
+
+    const design = designFiles.map((item) => ({
+      originalName: item.originalName,
+      fileName: item.name,
+      fileType: item.type,
+      fileUrl: item.url,
+      uploadType: 'design',
+    }));
+
+    const uploadsData = await Models.UploadsModel.bulkCreate([
+      ...photos,
+      ...design,
+    ]);
+
+    // set products
+
+    const {
+      productName,
+      productType,
+      productCollection,
+      productDescription,
+      productPrice,
+      productStatus,
+    } = req.formData;
+
+    const product = {
+      productName,
+      productType,
+      productCollection,
+      productDescription,
+      productPrice,
+      productStatus: productStatus.toLowerCase().replace(/ /g, '_'),
+    };
+
+    const productData = await Models.ProductsModel.create(product);
+
+    // set productsfiles
+
+    const productFiles = uploadsData.map((file) => ({
+      idProduct: productData.id,
+      idFile: file.id,
+    }));
+
+    const productFilesData = await Models.ProductFilesModel.bulkCreate(
+      productFiles,
+    );
+
+    // get vendor id
+
+    const { id: idUserJwt } = req.jwt.decoded;
+
+    const userFound = await Models.UsersModel.findOne({
+      where: {
+        id: idUserJwt,
+      },
+      include: [
+        {
+          model: Models.VendorsModel,
+          required: true,
+        },
+      ],
     });
-    bb.on('field', (name, val) => {
-      console.log(`Field [${name}]: value: %j`, val);
-    });
-    bb.on('close', () => {
-      console.log('Done parsing form!');
-      res.json('done');
-    });
-    req.pipe(bb);
+
+    const idVendor = userFound.vendor !== null ? userFound.vendor.id : undefined;
+
+    // set collections
+
+    const collection = {
+      idProduct: productData.id,
+      idVendor,
+      collectionName: productCollection,
+    };
+
+    const collectionData = await Models.CollectionsModel.create(collection);
+
+    res.json('add prod');
   },
 };
