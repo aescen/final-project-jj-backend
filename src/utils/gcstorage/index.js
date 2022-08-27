@@ -1,5 +1,7 @@
 // https://stackoverflow.com/questions/62666032/how-to-createwritestream-to-gcs
 // https://cloud.google.com/storage/docs/access-control/making-data-public
+// https://cloud.google.com/nodejs/docs/reference/storage/latest
+
 /* eslint-disable no-unused-vars */
 const { Storage } = require('@google-cloud/storage');
 const { customAlphabet, urlAlphabet } = require('nanoid');
@@ -15,7 +17,11 @@ const bucket = storage.bucket(process.env.STORAGE_BUCKET);
 const nanoid = customAlphabet(urlAlphabet, 10);
 
 module.exports = {
-  uploadFile: async (fileStream, type, path = '/files') => new Promise((resolve, reject) => {
+  uploadFile: async (
+    fileStream,
+    type,
+    path = 'files',
+  ) => new Promise((resolve, reject) => {
     try {
       const timestamp = Date.now();
       // const name = fileName.replace(/ /g, '_');
@@ -25,6 +31,9 @@ module.exports = {
       const options = {
         resumable: false,
         public: true,
+        // metadata: {
+        //   contentDisposition: `inline; filename="${newName}"`,
+        // },
       };
 
       const fileRef = bucket.file(objPath);

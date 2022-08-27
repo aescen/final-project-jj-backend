@@ -2,8 +2,8 @@ const busboy = require('busboy');
 const { TokenManager } = require('../utils');
 const { GCStorage } = require('../utils');
 
-const DESIGN_PATH = '/designs';
-const IMAGES_PATH = '/images';
+const DESIGN_PATH = 'designs';
+const IMAGES_PATH = 'images';
 
 module.exports = {
   verifyJWT: (req, res, next) => {
@@ -58,6 +58,7 @@ module.exports = {
   },
   parseFormData: (req, res, next) => {
     const bb = busboy({ headers: req.headers });
+    req.formData = {};
     req.filesCount = 0;
     req.pipe(bb);
 
@@ -83,8 +84,8 @@ module.exports = {
         const filesProp = name.replace(/\[\]/g, '');
         const files = [objectData];
 
-        if (req.formData?.fileProp) {
-          files.push(...req.formData.fileProp);
+        if (req.formData[filesProp]) {
+          files.push(...req.formData[filesProp]);
         }
 
         req.formData = {

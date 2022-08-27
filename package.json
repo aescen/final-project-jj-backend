@@ -4,7 +4,7 @@
   "description": "",
   "main": "./src/app.js",
   "scripts": {
-    "start": "node ./src/app.js",
+    "start": "node --trace-warnings ./src/app.js",
     "dev": "nodemon ./src/app.js",
     "web": "node --optimize_for_size --max_old_space_size=448 --gc_interval=100 ./src/app.js",
     "lint": "eslint ./"
@@ -25,6 +25,7 @@
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
     "nanoid": "^3.3.4",
+    "pug": "^3.0.2",
     "sequelize": "^6.21.3"
   },
   "devDependencies": {

@@ -3,12 +3,11 @@ const Models = require('../../models');
 module.exports = {
   addProduct: async (req, res) => {
     // set uploads
-
     const { designPhotos, designFiles } = req.formData;
 
     const photos = designPhotos.map((item) => ({
       originalName: item.originalName,
-      fileName: item.name,
+      fileName: item.name.replace(/\//g, ''),
       fileType: item.type,
       fileUrl: item.url,
       uploadType: 'photos',
@@ -16,7 +15,7 @@ module.exports = {
 
     const design = designFiles.map((item) => ({
       originalName: item.originalName,
-      fileName: item.name,
+      fileName: item.name.replace(/\//g, ''),
       fileType: item.type,
       fileUrl: item.url,
       uploadType: 'design',
@@ -56,9 +55,7 @@ module.exports = {
       idFile: file.id,
     }));
 
-    const productFilesData = await Models.ProductFilesModel.bulkCreate(
-      productFiles,
-    );
+    await Models.ProductFilesModel.bulkCreate(productFiles);
 
     // get vendor id
 
@@ -86,8 +83,22 @@ module.exports = {
       collectionName: productCollection,
     };
 
-    const collectionData = await Models.CollectionsModel.create(collection);
+    await Models.CollectionsModel.create(collection);
 
-    res.json('add prod');
+    const theProduct = {
+      productName,
+      productType,
+      productCollection,
+      productDescription,
+      productPrice,
+      productStatus,
+      designPhotos: photos,
+      designFiles: design,
+    };
+
+    res.json({
+      status: 'success',
+      data: theProduct,
+    });
   },
 };

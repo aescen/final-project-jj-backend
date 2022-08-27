@@ -40,20 +40,15 @@ const errorHandler = (err, req, res, next) => {
     // await Models.ProductFilesModel.sync({ alter: true });
     // await Models.CollectionsModel.sync({ alter: true });
 
-    await Models.RolesModel.sync();
-    await Models.UsersModel.sync();
-    await Models.VendorsModel.sync();
-    await Models.ProductsModel.sync();
-    await Models.UploadsModel.sync();
-    await Models.ProductFilesModel.sync();
-    await Models.CollectionsModel.sync();
-
     console.log('DB setup done.');
   } catch (error) {
     console.error(error);
     console.error('Unable to connect to the database.');
   }
 })();
+
+app.set('views', `${__dirname}/views/`);
+app.set('view engine', 'pug');
 
 app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
