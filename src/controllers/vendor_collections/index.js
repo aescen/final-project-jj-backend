@@ -6,7 +6,7 @@ module.exports = {
       include: [
         {
           model: Models.ProductsModel,
-          required: true,
+          required: false,
         },
       ],
     });
@@ -15,11 +15,11 @@ module.exports = {
       include: [
         {
           model: Models.UploadsModel,
-          required: true,
+          required: false,
         },
         {
           model: Models.ProductsModel,
-          required: true,
+          required: false,
         },
       ],
     });

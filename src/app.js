@@ -39,6 +39,7 @@ const errorHandler = (err, req, res, next) => {
     // await Models.UploadsModel.sync({ alter: true });
     // await Models.ProductFilesModel.sync({ alter: true });
     // await Models.CollectionsModel.sync({ alter: true });
+    // await Models.TransactionsModel.sync({ alter: true });
 
     console.log('DB setup done.');
   } catch (error) {
