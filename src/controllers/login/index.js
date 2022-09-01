@@ -1,4 +1,4 @@
-const { UsersModel } = require('../../models');
+const { RolesModel, UsersModel, VendorsModel } = require('../../models');
 const { TokenManager, BCryptPassword } = require('../../utils');
 
 module.exports = {
@@ -18,7 +18,16 @@ module.exports = {
       where: {
         email,
       },
-      include: { all: true, nested: true },
+      include: [
+        {
+          model: VendorsModel,
+          required: true,
+        },
+        {
+          model: RolesModel,
+          required: true,
+        },
+      ],
     });
 
     if (userFound === null) {
@@ -30,7 +39,7 @@ module.exports = {
       return;
     }
 
-    const idVendor = userFound.vendor !== null ? userFound.vendor.vendor : undefined;
+    const idVendor = userFound.vendor !== null ? userFound.vendor.id : undefined;
 
     console.log(await BCryptPassword.hash(password));
 
@@ -51,7 +60,6 @@ module.exports = {
     try {
       const accessToken = TokenManager.generateAccessToken({
         id: userFound.id,
-        idVendor,
         role: userFound.role.role,
       });
 
