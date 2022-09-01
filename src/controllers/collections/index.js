@@ -6,7 +6,7 @@ module.exports = {
       include: [
         {
           model: Models.ProductsModel,
-          required: true,
+          required: false,
         },
       ],
     });
@@ -15,7 +15,7 @@ module.exports = {
       include: [
         {
           model: Models.UploadsModel,
-          required: true,
+          required: false,
         },
       ],
     });
@@ -33,6 +33,14 @@ module.exports = {
         }
 
         photosUrl.set(item.idProduct, [fileUrl]);
+      }
+    });
+
+    const designsUrl = new Map();
+    productFiles.forEach((item) => {
+      if (item.upload.uploadType !== 'photos') {
+        const { fileUrl } = item.upload;
+        designsUrl.set(item.idProduct, fileUrl);
       }
     });
 
@@ -56,11 +64,16 @@ module.exports = {
           .replace(/_/g, ' ')
           .toUpperCase(),
         designPhotos: [],
+        designsUrl: '',
       };
 
       // arrange
       if (photosUrl.has(idProduct)) {
         product.designPhotos = photosUrl.get(idProduct);
+      }
+
+      if (designsUrl.has(idProduct)) {
+        product.designsUrl = designsUrl.get(idProduct);
       }
 
       if (collections.has(collectionName)) {

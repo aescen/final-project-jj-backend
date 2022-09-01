@@ -43,10 +43,62 @@ module.exports = {
       });
     }
   },
+  verifyJWTOrAnon: (req, res, next) => {
+    const { authorization } = req.headers;
+
+    if (!authorization) {
+      req.anon = true;
+      next();
+      return;
+    }
+
+    try {
+      const decoded = TokenManager.verifyAccessToken(authorization);
+
+      if (decoded) {
+        req.jwt = {
+          decoded,
+        };
+        next();
+        return;
+      }
+
+      res.status(401);
+      res.json({
+        status: 'error',
+        message: 'Gagal memuat data. Token anda tidak valid.',
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500);
+      res.json({
+        status: 'error',
+        message: 'Terjadi kegagalan di server kami',
+      });
+    }
+  },
   verifyAsVendor: (req, res, next) => {
     const { role: roleJwt } = req.jwt.decoded;
 
     if (roleJwt !== 'vendor') {
+      res.status(403);
+      res.json({
+        status: 'error',
+        message: 'Anda tidak memiliki hak akses.',
+      });
+      return;
+    }
+    next();
+  },
+  verifyAsUser: (req, res, next) => {
+    if (req.anon) {
+      next();
+      return;
+    }
+
+    const { role: roleJwt } = req.jwt.decoded;
+
+    if (roleJwt !== 'user') {
       res.status(403);
       res.json({
         status: 'error',

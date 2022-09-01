@@ -23,11 +23,11 @@ module.exports = {
     });
   },
   getVendorById: async (req, res) => {
-    const { idVendor } = req.params;
+    const { id } = req.params;
 
     const vendorFound = await VendorsModel.findOne({
       where: {
-        id: idVendor,
+        id,
       },
       include: { all: true, nested: true },
     });
@@ -41,9 +41,16 @@ module.exports = {
       return;
     }
 
+    const mappedVendor = {
+      bgExp: vendorFound.bgExp,
+      linkedIn: vendorFound.linkedIn,
+      userStatus: vendorFound.userStatus,
+      vendorName: vendorFound.vendorName,
+    };
+
     res.json({
       status: 'success',
-      vendor: vendorFound,
+      vendor: mappedVendor,
     });
   },
   updateVendorById: async (req, res) => {

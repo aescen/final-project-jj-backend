@@ -5,6 +5,7 @@ const UploadsModel = require('./uploads');
 const ProductsModel = require('./products');
 const ProductFilesModel = require('./productfiles');
 const CollectionsModel = require('./collections');
+const TransactionsModel = require('./transactions');
 
 module.exports = {
   RolesModel,
@@ -14,4 +15,5 @@ module.exports = {
   ProductsModel,
   ProductFilesModel,
   CollectionsModel,
+  TransactionsModel,
 };

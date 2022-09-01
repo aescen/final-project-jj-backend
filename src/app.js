@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 // -- imports
-const cors = require('cors');
+// const cors = require('cors');
 const express = require('express');
 const sequelize = require('./config/dbConnection');
 const Models = require('./models');
@@ -39,6 +39,7 @@ const errorHandler = (err, req, res, next) => {
     // await Models.UploadsModel.sync({ alter: true });
     // await Models.ProductFilesModel.sync({ alter: true });
     // await Models.CollectionsModel.sync({ alter: true });
+    // await Models.TransactionsModel.sync({ alter: true });
 
     console.log('DB setup done.');
   } catch (error) {
@@ -50,7 +51,7 @@ const errorHandler = (err, req, res, next) => {
 app.set('views', `${__dirname}/views/`);
 app.set('view engine', 'pug');
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+// app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 app.use(routerRoutes);
 app.use('*', (req, res) => {

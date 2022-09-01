@@ -14,6 +14,8 @@ module.exports = {
       return;
     }
 
+    console.log(email, password);
+
     const userFound = await UsersModel.findOne({
       where: {
         email,
@@ -21,11 +23,11 @@ module.exports = {
       include: [
         {
           model: VendorsModel,
-          required: true,
+          required: false,
         },
         {
           model: RolesModel,
-          required: true,
+          required: false,
         },
       ],
     });
